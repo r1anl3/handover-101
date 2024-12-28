@@ -30,3 +30,4 @@
 - [Container compute resource](https://docs.docker.com/get-started/docker-concepts/running-containers/overriding-container-defaults/#restricting-the-container-to-consume-the-resources)
 - [Container volume](https://docs.docker.com/get-started/docker-concepts/running-containers/persisting-container-data/#explanation)
 - [Share file from local to container](https://docs.docker.com/get-started/docker-concepts/running-containers/sharing-local-files/#sharing-files-between-a-host-and-container)
+- [Execute command in container](https://docs.docker.com/reference/cli/docker/container/exec/)
