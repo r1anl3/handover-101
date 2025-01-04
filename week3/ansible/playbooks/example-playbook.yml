@@ -16,14 +16,22 @@
       ansible.builtin.debug:
         msg: "mysecret: {{ mysecret }}"
 
-    - name: Check kubectl version
-      ansible.builtin.command: kube version
-      register: kubectl_version
+    - name: Check Docker version
+      ansible.builtin.command: docker version
+      register: docker_version 
       changed_when: false
 
-    - name: Print kubectl version
+    - name: Print Docker version
       ansible.builtin.debug:
-        msg: "{{ kubectl_version }}"
+        msg: "{{ docker_version | to_nice_json }}"
 
-    - name: Copy example Jinja template
-      
+    - name: Copy example Nginx config template
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../example/template/example-template.j2"
+        dest: "{{ playbook_dir }}/../tmp/nginx.conf"
+        mode: "0600"
+
+    - name: Delete Nginx config file
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../tmp/nginx.conf"
+        state: absent 
