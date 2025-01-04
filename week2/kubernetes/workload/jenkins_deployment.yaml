@@ -33,6 +33,6 @@ spec:
             cpu: "2000m"
             memory: "4096Mi"
       volumes:
-        - name: jenkins-data
+        - name: jenkins-home
           persistentVolumeClaim:
             claimName: jenkins-pvc
