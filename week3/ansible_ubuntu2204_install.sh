@@ -9,7 +9,6 @@ sudo apt-add-repository ppa:ansible/ansible
 sudo apt update
 sudo apt install ansible
 ansible --version
-
 echo " "
 
 echo "### Step 2 — Setting Up the Inventory File ###"
@@ -30,15 +29,16 @@ else
 fi
 
 ansible-inventory --list -y
-
 echo " "
 
 echo "### Step 3 — Testing Connection ###"
 
 ansible all -m ping -u root
+echo " "
 
 echo "### Step 4 — Running Ad-Hoc Commands ###"
 
 ansible all -a "df -h" -u root
+echo " "
 
 echo "### Done! ###"
