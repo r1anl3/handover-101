@@ -8,12 +8,21 @@
     # traefik_deployment_file: "{{ playbook_dir }}/../tmp/traefik_deployment.yaml"
     # traefik_service_template: "{{ playbook_dir }}/../traefik-ingress/template/traefik_svc.j2"
     # traefik_service_file: "{{ playbook_dir }}/../tmp/traefik_svc.yaml"
+    # traefik_sa_template: "{{ playbook_dir }}/../traefik-ingress/template/traefik_sa.j2"
+    # traefik_sa_file: "{{ playbook_dir }}/../tmp/traefik_sa.yaml"
     traefik_helm_values: "{{ playbook_dir }}/../traefik-ingress/group_vars/traefik-values.yaml"
   
   vars_files:
     - "{{ playbook_dir }}/../traefik-ingress/group_vars/general-vars.yml"
 
   tasks:
+
+# ---Traefik Namespace---
+    - name: Create Traefik namespace
+      kubernetes.core.k8s:
+        kind: Namespace
+        name: "{{ traefik_namespace }}"
+        state: present
 
 # ---Traefik Helm---
     - name: Add {{ traefik_helm_name }} helm repo
@@ -27,17 +36,27 @@
         release_name: "{{ traefik_helm_name }}"
         release_namespace: "{{ traefik_namespace }}"
         values_files: "{{ traefik_helm_values }}"
-        create_namespace: true
         chart_ref: "{{ traefik_chart_ref }}"
-        state: absent
+        state: present
 
-  # ---Traefik Deployment---
-    # - name: Create Traefik namespace
+  # ---Traefik Service Account---
+    # - name: Copy Traefik Service Account template
+    #   ansible.builtin.template:
+    #     src: "{{ traefik_sa_template }}"
+    #     dest: "{{ traefik_sa_file }}"
+    #     mode: "0600"
+      
+    # - name: Deploy Traefik Service Account
     #   kubernetes.core.k8s:
-    #     kind: Namespace
-    #     name: "{{ traefik_namespace }}"
+    #     src: "{{ traefik_sa_file }}"
     #     state: present
 
+    # - name: Clean up
+    #   ansible.builtin.file:
+    #     path: "{{ traefik_sa_file }}"
+    #     state: absent
+
+  # ---Traefik Deployment---
     # - name: Copy Traefik deployment template
     #   ansible.builtin.template:
     #     src: "{{ traefik_deployment_template }}"
@@ -60,12 +79,6 @@
     #     src: "{{ traefik_service_template }}"
     #     dest: "{{ traefik_service_file }}"
     #     mode: "0600"
-    
-    # - name: Create Traefik namespace
-    #   kubernetes.core.k8s:
-    #     kind: Namespace
-    #     name: "{{ traefik_namespace }}"
-    #     state: present
       
     # - name: Deploy Traefik service
     #   kubernetes.core.k8s:
