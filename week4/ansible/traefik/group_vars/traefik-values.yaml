@@ -1,0 +1,22 @@
+# References:
+#   https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+---
+ingressRoute:
+  jenkins-ingress:
+    # -- Create an IngressRoute for the Jenkins
+    enabled: true
+    # -- Deploy on default namespace
+    namespace: default
+    # -- Add Rule to route traffics from outside
+    matchRule: Host(`localhost`) && PathPrefix(`/jenkins`)
+    # -- Route traffics to jenkins-web service on jenkins namespace
+    services:
+      - name: jenkins-web
+        namespace: jenkins
+    # -- No TLS applied
+    tls: {}
+
+providers:  # @schema additionalProperties: false
+  kubernetesCRD:
+    # -- Allows IngressRoute to reference resources in namespace other than theirs
+    allowCrossNamespace: true
