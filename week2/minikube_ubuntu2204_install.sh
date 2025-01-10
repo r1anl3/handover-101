@@ -19,7 +19,7 @@ minikube start
 
 echo " "
 
-echo "### Step 3 — Using the Kubenetes Command ###"
+echo "### Step 3 — Using the Kubernetes Command ###"
 
 kubectl get ns
 
